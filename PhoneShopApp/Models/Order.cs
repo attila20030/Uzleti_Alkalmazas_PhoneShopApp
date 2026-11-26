@@ -10,5 +10,5 @@ public class Order
     public string UserId { get; set; } = "";
     public AppUser? User { get; set; }
 
-    public OrderItem[] Items { get; set; } = Array.Empty<OrderItem>();
+    public List<OrderItem> Items { get; set; } = new();
 }

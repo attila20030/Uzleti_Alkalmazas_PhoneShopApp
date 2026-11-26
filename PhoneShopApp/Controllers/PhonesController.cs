@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using PhoneShopApp.Models;
 
 namespace PhoneShopApp.Controllers;
 
+[Authorize(Roles = "Admin")]
 public class PhonesController : Controller
 {
     private readonly AppDbContext _db;
@@ -13,6 +15,7 @@ public class PhonesController : Controller
     public PhonesController(AppDbContext db) => _db = db;
 
     // GET: /Phones (Lista + szűrés márkára és keresőszóra)
+    [AllowAnonymous]
     public async Task<IActionResult> Index(int? brandId, string? search)
     {
         var query = _db.Phones

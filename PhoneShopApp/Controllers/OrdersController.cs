@@ -1,4 +1,4 @@
-ï»¿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +38,7 @@ public class OrdersController : Controller
     {
         if (quantity < 1)
         {
-            TempData["Error"] = "A mennyisÃ©gnek legalÃ¡bb 1-nek kell lennie!";
+            TempData["Error"] = "A mennyiségnek legalább 1-nek kell lennie!";
             return RedirectToAction("Index", "Phones");
         }
 
@@ -47,7 +47,7 @@ public class OrdersController : Controller
 
         if (phone.StockQuantity < quantity)
         {
-            TempData["Error"] = $"Nincs elegendÅ‘ kÃ©szlet a(z) {phone.ModelName} modellbÅ‘l (elÃ©rhetÅ‘: {phone.StockQuantity} db).";
+            TempData["Error"] = $"Nincs elegendõ készlet a(z) {phone.ModelName} modellbõl (elérhetõ: {phone.StockQuantity} db).";
             return RedirectToAction("Index", "Phones");
         }
 
@@ -57,9 +57,9 @@ public class OrdersController : Controller
         {
             UserId = userId,
             OrderDate = DateTime.Now,
-            Status = "FeldolgozÃ¡s alatt",
+            Status = "Feldolgozás alatt",
             TotalAmount = phone.Price * quantity,
-            Items = new[]
+            Items = new List<OrderItem>
             {
                 new OrderItem
                 {
@@ -74,7 +74,7 @@ public class OrdersController : Controller
         _db.Orders.Add(order);
         await _db.SaveChangesAsync();
 
-        TempData["Success"] = "RendelÃ©sedet sikeresen rÃ¶gzÃ­tettÃ¼k!";
+        TempData["Success"] = "Rendelésedet sikeresen rögzítettük!";
         return RedirectToAction(nameof(Index));
     }
 
@@ -90,7 +90,7 @@ public class OrdersController : Controller
 
         if (order is null) return NotFound();
 
-        if (status == "TÃ¶rÃ¶lve" && order.Status != "TÃ¶rÃ¶lve")
+        if (status == "Törölve" && order.Status != "Törölve")
         {
             foreach (var item in order.Items)
             {
