@@ -245,6 +245,60 @@ namespace PhoneShopApp.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PhoneShopApp.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("PhoneShopApp.Models.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PhoneId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PhoneId");
+
+                    b.ToTable("OrderItems");
+                });
+
             modelBuilder.Entity("PhoneShopApp.Models.Phone", b =>
                 {
                     b.Property<int>("Id")
@@ -354,6 +408,36 @@ namespace PhoneShopApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PhoneShopApp.Models.Order", b =>
+                {
+                    b.HasOne("PhoneShopApp.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PhoneShopApp.Models.OrderItem", b =>
+                {
+                    b.HasOne("PhoneShopApp.Models.Order", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PhoneShopApp.Models.Phone", "Phone")
+                        .WithMany()
+                        .HasForeignKey("PhoneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Phone");
+                });
+
             modelBuilder.Entity("PhoneShopApp.Models.Phone", b =>
                 {
                     b.HasOne("PhoneShopApp.Models.Brand", "Brand")
@@ -368,6 +452,11 @@ namespace PhoneShopApp.Migrations
             modelBuilder.Entity("PhoneShopApp.Models.Brand", b =>
                 {
                     b.Navigation("Phones");
+                });
+
+            modelBuilder.Entity("PhoneShopApp.Models.Order", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
