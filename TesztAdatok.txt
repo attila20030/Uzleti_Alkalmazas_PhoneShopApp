@@ -1,0 +1,15 @@
+ADMIN:
+admin@phoneshop.hu
+Admin123
+
+• Új telefon felvitele, árak és készlet módosítása, valamint az összes vásárlói rendelés státuszának kezelése (Teljesítve / Törlés).
+
+VÁSÁRLÓ:
+Teszt Vásárló
+vasarlo@teszt.hu
+Teszt123
+
+ÚJ VÁSÁRLÓ:
+Kovács Péter
+peter@teszt.hu
+Peter123
