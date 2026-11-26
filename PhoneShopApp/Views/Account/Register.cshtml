@@ -1,0 +1,18 @@
+<h2>Regisztráció</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Register" method="post" class="col-md-4">
+    <div class="mb-3">
+        <label class="form-label">Teljes név</label>
+        <input type="text" name="fullName" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">E-mail cím</label>
+        <input type="email" name="email" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Jelszó (min. 6 karakter)</label>
+        <input type="password" name="password" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-success">Fiók létrehozása</button>
+</form>

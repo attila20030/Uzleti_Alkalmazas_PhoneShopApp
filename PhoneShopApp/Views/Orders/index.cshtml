@@ -1,0 +1,62 @@
+@model PhoneShopApp.Models.Order[]
+
+<h2>@(User.IsInRole("Admin") ? "Összes beérkezett rendelés" : "Saját rendeléseim")</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<table class="table table-bordered align-middle">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Dátum</th>
+            @if (User.IsInRole("Admin")) { <th>Vásárló</th> }
+            <th>Tételek</th>
+            <th>Végösszeg</th>
+            <th>Státusz</th>
+            @if (User.IsInRole("Admin")) { <th>Kezelés</th> }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.Id</td>
+                <td>@o.OrderDate.ToString("yyyy.MM.dd HH:mm")</td>
+                @if (User.IsInRole("Admin")) { <td>@o.User?.FullName (@o.User?.Email)</td> }
+                <td>
+                    @foreach (var item in o.Items)
+                    {
+                        <div>@item.Phone?.Brand?.Name @item.Phone?.ModelName – <strong>@item.Quantity db</strong> (@item.UnitPrice.ToString("N0") Ft/db)</div>
+                    }
+                </td>
+                <td><strong>@o.TotalAmount.ToString("N0") Ft</strong></td>
+                <td>
+                    <span class="badge @(o.Status == "Teljesítve" ? "bg-success" : o.Status == "Törölve" ? "bg-danger" : "bg-warning text-dark")">
+                        @o.Status
+                    </span>
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @if (o.Status != "Törölve")
+                        {
+                            <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@o.Id" />
+                                <input type="hidden" name="status" value="Teljesítve" />
+                                <button type="submit" class="btn btn-sm btn-success">Teljesítve</button>
+                            </form>
+                            <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@o.Id" />
+                                <input type="hidden" name="status" value="Törölve" />
+                                <button type="submit" class="btn btn-sm btn-danger">Törlés</button>
+                            </form>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
